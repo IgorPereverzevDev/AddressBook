@@ -83,12 +83,12 @@ public class BookTest {
     @Test
     public void insertNull() {
 
-        Book book = new Book();
+    Book book = new Book();
         book.insert(null);
 
-        int expectedValues = 0;
+                int expectedValues = 0;
 
-        assertEquals(expectedValues, book.getMap().size());
+                assertEquals(expectedValues, book.getMap().size());
 
-    }
-}
+                }
+                }

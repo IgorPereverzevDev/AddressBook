@@ -13,13 +13,11 @@ class ApplicationAddressBook {
 
         for (String s : rawData) {
             String[] data = s.split(AddressBookValues.DELIMITER);
-            for (int i = 0; i < data.length; ++i) {
-                Record record = new Record();
-                record.setName(data[i].trim());
-                record.setSex(data[++i].trim());
-                record.setBirthDate(data[++i].trim());
-                book.insert(record);
-            }
+            Record record = new Record();
+            record.setName(data[0].trim());
+            record.setSex(data[1].trim());
+            record.setBirthDate(data[2].trim());
+            book.insert(record);
         }
         System.out.println(book.getNumberOfMales());
         System.out.println(book.getOldestPerson());
