@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -41,7 +41,7 @@ class ApplicationAddressBook {
     private static Book fillingInData(List<String> rawData) {
         Book book = new Book();
         if (rawData.size() == 0) {
-            rawData = new ArrayList<>();
+            Collections.fill(Collections.singletonList(rawData), 0);
         }
         for (String s : rawData) {
             String[] data = s.split(AddressBookValues.DELIMITER);
