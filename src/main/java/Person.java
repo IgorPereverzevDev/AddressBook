@@ -7,11 +7,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 
-class Record {
+class Person implements Comparable<Person> {
 
     @Getter
     @Setter
-    private String name;
+    private String firstName;
+
+    @Getter
+    @Setter
+    private String lastName;
 
     @Getter
     @Setter
@@ -21,8 +25,13 @@ class Record {
     private LocalDate birthDate;
 
     public void setBirthDate(String birthDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(AddressBookValues.PATTERN, Locale.ENGLISH);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(AddressBookValues.DATE_FORMAT, Locale.ENGLISH);
         this.birthDate = LocalDate.parse(birthDate, formatter);
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return firstName.compareTo(o.firstName);
     }
 
 }

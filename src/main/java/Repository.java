@@ -1,9 +1,9 @@
 interface Repository {
 
-    int getNumberOfMales();
+    long getNumberOfMales();
 
-    String getOldestPerson();
+    Person getOldestPerson();
 
-    long diffOfAges();
+    long diffOfAges(Person one, Person two);
 
 }
