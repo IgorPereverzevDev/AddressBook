@@ -1,5 +1,7 @@
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
@@ -13,15 +15,18 @@ class ApplicationAddressBook {
         System.out.print("Enter the path to the file: ");
         System.out.flush();
         String input = scanner.nextLine();
-        if (input.length() != 0) {
-            rawData = Files.readAllLines(Paths.get(input));
+        Path path = Paths.get(input);
+        if (input.length() != 0 && Files.isRegularFile(path)) {
+            rawData = Files.readAllLines(path);
         } else {
             rawData = Files.readAllLines(Paths.get(System.getProperty(AddressBookValues.HOME_DIRECTORY)
-                    + AddressBookValues.FILE));
+                    + AddressBookValues.SOLIDUS + AddressBookValues.FILE));
         }
-        scanner.close();
 
-        Book book = fillingInData(rawData);
+        scanner.close();
+        cleanup(path);
+
+        Book book = fillingByData(rawData);
 
         System.out.println("The number of men = " + book.getNumberOfMales());
         System.out.println("The oldest person: " + book.getOldestPerson().getFirstName() + " "
@@ -37,14 +42,13 @@ class ApplicationAddressBook {
                 book.diffOfAges(personOne, personTwo) + " days");
     }
 
-
-    private static Book fillingInData(List<String> rawData) {
+    private static Book fillingByData(List<String> rawData) {
         Book book = new Book();
         if (rawData.size() == 0) {
             Collections.fill(Collections.singletonList(rawData), 0);
         }
         for (String s : rawData) {
-            String[] data = s.split(AddressBookValues.DELIMITER);
+            String[] data = s.split(AddressBookValues.COMMA);
             Person person = new Person();
             person.setFirstName(data[0].split(" ")[0]);
             person.setLastName(data[0].split(" ")[1]);
@@ -53,5 +57,22 @@ class ApplicationAddressBook {
             book.insert(person);
         }
         return book;
+    }
+
+    private static void cleanup(Path dir) throws IOException {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+            for (Path file : stream) {
+                if (file.getFileName().endsWith(AddressBookValues.FILE)) {
+                    try {
+                        Files.delete(file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        Files.delete(file);
+                    }
+                }
+            }
+
+        }
     }
 }
